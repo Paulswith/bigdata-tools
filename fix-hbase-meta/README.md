@@ -42,6 +42,9 @@ ERROR: Unknown table abc_table!
 - run `hbase hbck -details` got 'ERROR: Region xxxx not deployed on any region server'
 
 ## How to fix?
-hbase hbck -j /tmp/hbase-hbck2-1.2.0.jar assigns $(hbase hbck -details grep 'not deployed on any region server' | grep -oE  '[a-z0-9]{32}' | sort -u | tr '\n' ' ')
+```bash
+hbase hbck -j /tmp/hbase-hbck2-1.2.0.jar \
+    assigns $(hbase hbck -details grep 'not deployed on any region server' | grep -oE  '[a-z0-9]{32}' | sort -u | tr '\n' ' ')
+```
 
 if you check the number of total regions, it should raise. now everything shoule be ok.
