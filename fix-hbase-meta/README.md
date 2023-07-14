@@ -31,8 +31,17 @@ ERROR: Unknown table abc_table!
 1. Download [hbck2.jar](https://jar-download.com/?search_box=hbck) and place it in a directory of your choice, for example `/tmp/hbase-hbck2-1.2.0.jar`.
 2. Set up Python, preferably version 3.10 or above. 
 3. Install the `sh` library, a useful command interative library, using `pip install sh`
-4. Use any user account that hbase HBase operation permission. In my case, I used the HBase user.
-5. Run `python fix-meta.py`, This will attempt to fix all missing regions.
+4. Use any user account that has HBase operation permission. In my case, I used the hbase user.
+5. Run `python fix-meta.py`, this will attempt to fix all missing regions.
 6. You may need to restart HBase master for the changes made in step 5 to take effect.
 
 
+# Next story
+## Problem Description
+- run `majar_compact 'mytable'` in hbase shell got `ERROR: No server address listed in hbase:meta for region mytable, xxxx`
+- run `hbase hbck -details` got 'ERROR: Region xxxx not deployed on any region server'
+
+## How to fix?
+hbase hbck -j /tmp/hbase-hbck2-1.2.0.jar assigns $(hbase hbck -details grep 'not deployed on any region server' | grep -oE  '[a-z0-9]{32}' | sort -u | tr '\n' ' ')
+
+if you check the number of total regions, it should raise. now everything shoule be ok.
